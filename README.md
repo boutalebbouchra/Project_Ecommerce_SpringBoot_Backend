@@ -1,2 +1,5 @@
 # Projet_Ecommece_SpringBoot_Backend
-site e commerce developper avec SpringBoot - API RESTFULL
+Site e-commerce développé avec SpringBoot - API RESTful
+
+Site e-commerce utilisant les API RESTful avec SpringBoot (Backend).
+
