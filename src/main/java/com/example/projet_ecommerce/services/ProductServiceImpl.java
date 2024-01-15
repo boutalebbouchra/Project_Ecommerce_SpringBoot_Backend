@@ -151,4 +151,23 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("Erreur lors de la mise à jour du produit.");
         }
     }
+
+    //API pour supprimer un produit:
+
+    @Override
+    public void deleteProductByUuid(String uuid) {
+        Product existingProduct = getProductByUuid(uuid);
+
+        if (existingProduct == null) {
+            throw new IllegalArgumentException("Produit introuvable avec l'UUID : " + uuid);
+        }
+
+        try {
+            productRepository.delete(existingProduct);
+            logger.info("Produit supprimé avec succès avec l'UUID : {}", uuid);
+        } catch (Exception e) {
+            logger.error("Erreur lors de la suppression du produit : {}", e.getMessage());
+            throw new IllegalArgumentException("Erreur lors de la suppression du produit.");
+        }
+    }
 }

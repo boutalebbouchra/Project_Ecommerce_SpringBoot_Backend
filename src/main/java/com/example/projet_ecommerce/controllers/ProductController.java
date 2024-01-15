@@ -64,4 +64,16 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/product/{uuid}")
+    public ResponseEntity<Object> deleteProduct(@PathVariable String uuid) {
+        try {
+            productService.deleteProductByUuid(uuid);
+            logger.info("Produit supprimé avec succès avec l'UUID : {}", uuid);
+            return new ResponseEntity<>("Produit supprimé avec succès.", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            logger.error("Erreur lors de la suppression du produit : {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

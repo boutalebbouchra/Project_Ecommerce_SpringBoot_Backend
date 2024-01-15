@@ -10,5 +10,7 @@ public interface ProductService {
 
     void validateProduct(Product product,  boolean isUpdate);
 
+    void deleteProductByUuid(String uuid);
+
     Product updateProduct(String uuid, Product updatedProduct);
 }
