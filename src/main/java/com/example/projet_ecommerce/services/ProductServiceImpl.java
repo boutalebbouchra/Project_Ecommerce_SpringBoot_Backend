@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,19 +41,6 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("Erreur lors de l'enregistrement du produit.");
         }
     }
-
-    @Override
-    public Product getProductByUuid(String uuid) {
-        logger.info("Recherche du produit avec l'UUID : {}", uuid);
-        try {
-            Optional<Product> productOptional = productRepository.findByUuid(uuid);
-            return productOptional.orElse(null);
-        } catch (IllegalArgumentException e) {
-            logger.error("UUID invalide : {}", uuid);
-            throw new IllegalArgumentException("UUID invalide : " + uuid);
-        }
-    }
-
 
     public void validateProduct(Product product, boolean isUpdate) {
         validateMandatoryFields(product);
@@ -170,4 +158,27 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("Erreur lors de la suppression du produit.");
         }
     }
+
+
+    //API pour lister tous les produits
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    //API pour lister LES INFORMATIONS D UN PRODUIT
+
+    @Override
+    public Product getProductByUuid(String uuid) {
+        logger.info("Recherche du produit avec l'UUID : {}", uuid);
+        try {
+            Optional<Product> productOptional = productRepository.findByUuid(uuid);
+            return productOptional.orElse(null);
+        } catch (IllegalArgumentException e) {
+            logger.error("UUID invalide : {}", uuid);
+            throw new IllegalArgumentException("UUID invalide : " + uuid);
+        }
+    }
+
 }
