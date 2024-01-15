@@ -8,5 +8,7 @@ public interface ProductService {
     Product saveProduct(Product product);
     Product getProductByUuid(String uuid);
 
-    void validateProduct(Product product);
+    void validateProduct(Product product,  boolean isUpdate);
+
+    Product updateProduct(String uuid, Product updatedProduct);
 }

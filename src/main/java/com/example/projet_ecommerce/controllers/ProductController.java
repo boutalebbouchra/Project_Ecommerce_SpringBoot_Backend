@@ -44,4 +44,24 @@ public class ProductController {
         }
     }
 
+    @PutMapping("/product/{uuid}")
+    public ResponseEntity<Object> updateProduct(@PathVariable String uuid, @RequestBody Product updatedProduct) {
+        logger.info("Requête reçue pour mettre à jour un produit avec UUID : {}", uuid);
+
+        try {
+            Product updatedProductResult = productService.updateProduct(uuid, updatedProduct);
+
+            if (updatedProductResult != null) {
+                logger.info("Produit mis à jour avec succès : {}", updatedProductResult);
+                return new ResponseEntity<>(updatedProductResult, HttpStatus.OK);
+            } else {
+                logger.error("Échec de la mise à jour du produit.");
+                return new ResponseEntity<>("Échec de la mise à jour du produit.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (IllegalArgumentException e) {
+            logger.error("Erreur lors de la validation des champs : {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(Product product) {
-        validateProduct(product);
+        validateProduct(product,false);
 
         try {
             // Continuez avec l'enregistrement du produit dans la base de données
@@ -54,13 +54,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    public void validateProduct(Product product) {
+    public void validateProduct(Product product, boolean isUpdate) {
         validateMandatoryFields(product);
         validatePositivePrice(product.getPrice());
         validatePositiveStockQuantity(product.getStockQuantity());
         validateDescriptionLength(product.getDescription());
         validatePastDateAdded(product.getDateAdded());
-        validateUniqueUUID(product.getUuid());
+
+        // Valider uniquement si c'est une création de produit, pas une mise à jour
+        if (!isUpdate) {
+            validateUniqueUUID(product.getUuid());
+        }
+
         validateUniqueName(product.getName());
     }
 
@@ -109,6 +114,41 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> existingProductWithName = productRepository.findByName(name);
         if (existingProductWithName.isPresent()) {
             throw new IllegalArgumentException("Un produit avec ce nom existe déjà.");
+        }
+    }
+
+
+    //api pour modifier un produit:
+
+    @Override
+    public Product updateProduct(String uuid, Product updatedProduct) {
+        // Recherche du produit existant
+        Product existingProduct = getProductByUuid(uuid);
+
+        if (existingProduct == null) {
+            throw new IllegalArgumentException("Produit introuvable avec l'UUID : " + uuid);
+        }
+
+        // Mettre à jour les champs nécessaires
+        existingProduct.setName(updatedProduct.getName());
+        existingProduct.setDescription(updatedProduct.getDescription());
+        existingProduct.setPrice(updatedProduct.getPrice());
+        existingProduct.setStockQuantity(updatedProduct.getStockQuantity());
+        existingProduct.setCategory(updatedProduct.getCategory());
+        existingProduct.setImage(updatedProduct.getImage());
+
+        // Valider le produit mis à jour
+        validateProduct(existingProduct, true);
+
+        try {
+            // Enregistrez le produit mis à jour dans la base de données
+            Product savedProduct = productRepository.save(existingProduct);
+
+            logger.info("Produit mis à jour avec succès : {}", savedProduct);
+            return savedProduct;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la mise à jour du produit : {}", e.getMessage());
+            throw new IllegalArgumentException("Erreur lors de la mise à jour du produit.");
         }
     }
 }
