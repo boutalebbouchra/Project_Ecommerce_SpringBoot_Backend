@@ -119,6 +119,14 @@ public class PromotionServiceImpl implements PromotionService {
         }
     }
 
+    //API POUR LISTER LES PROMOS
+
+    @Override
+    public List<Promotion> getAllPromotions() {
+        return promotionRepository.findAll();
+    }
+
+
 
 
 
