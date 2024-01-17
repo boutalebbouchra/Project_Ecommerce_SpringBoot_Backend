@@ -98,6 +98,27 @@ public class PromotionServiceImpl implements PromotionService {
         }
     }
 
+    //API pour supprimer une promotion
+
+    @Override
+    public void deletePromotion(String uuid) {
+        Promotion existingPromotion = getPromotionByUuid(uuid);
+
+        if (existingPromotion == null) {
+            throw new IllegalArgumentException("Promotion introuvable avec l'UUID : " + uuid);
+        }
+
+        try {
+            // Supprimez la promotion de la base de données
+            promotionRepository.delete(existingPromotion);
+
+            logger.info("Promotion supprimée avec succès : {}", existingPromotion);
+        } catch (Exception e) {
+            logger.error("Erreur lors de la suppression de la promotion : {}", e.getMessage());
+            throw new IllegalArgumentException("Erreur lors de la suppression de la promotion.");
+        }
+    }
+
 
 
 

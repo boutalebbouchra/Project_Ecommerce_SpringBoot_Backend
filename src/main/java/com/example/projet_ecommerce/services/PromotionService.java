@@ -9,5 +9,7 @@ public interface PromotionService {
 
     Promotion updatePromotion(String uuid, Promotion updatedPromotion);
     Promotion getPromotionByUuid(String uuid);
+    void deletePromotion(String uuid);
+
 
 }

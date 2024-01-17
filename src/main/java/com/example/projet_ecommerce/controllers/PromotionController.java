@@ -42,6 +42,18 @@ public class PromotionController {
         }
     }
 
+    @DeleteMapping("/promotion/{uuid}")
+    public ResponseEntity<Object> deletePromotion(@PathVariable String uuid) {
+        try {
+            promotionService.deletePromotion(uuid);
+            return new ResponseEntity<>("Promotion supprimée avec succès", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }
