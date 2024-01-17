@@ -37,7 +37,6 @@ public class CategorieServiceImpl implements CategorieService {
             logger.error("UUID invalide : {}", uuid);
             throw new IllegalArgumentException("UUID invalide : {} " + uuid);
         }
-
     }
 
     @Override
@@ -52,7 +51,6 @@ public class CategorieServiceImpl implements CategorieService {
             throw new IllegalArgumentException("Erreur lors de l'enregistrement de Categorie.");
         }
     }
-
     @Override
     public void validateCategorie(Categorie categorie, boolean isUpdate) {
         validateMandatoryFields(categorie);
@@ -60,7 +58,7 @@ public class CategorieServiceImpl implements CategorieService {
             validateUniqueUuidCategory(categorie.getUuidCategorie());
             validateUniqueNameCategorie(categorie.getNameCategorie());
         }
-
+        validateUniqueNameCategorieUpdate(categorie.getNameCategorie(), categorie.getUuidCategorie());
     }
 
     private void validateMandatoryFields(Categorie categorie) {
@@ -84,6 +82,13 @@ public class CategorieServiceImpl implements CategorieService {
         }
     }
 
+    private void validateUniqueNameCategorieUpdate(String name, String uuid) {
+        long count = categorieRepo.countByNameCategorieAndUuidCategorieNot(name, uuid);
+        if ( count != 0) {
+            throw new IllegalArgumentException("la catégorie avec le nom "+name+" existe déja");
+        }
+    }
+
 
     @Override
     public void deleteCategorieByUuidCategorie(String uuid) {
@@ -103,15 +108,14 @@ public class CategorieServiceImpl implements CategorieService {
     @Override
     public Categorie updateCategorie(String uuid, Categorie updatedCategorie) {
         Categorie existingCategorie = getCategorieByUuidCategorie(uuid);
-
         if (existingCategorie == null) {
             throw new IllegalArgumentException("Catégories introuvable avec uuid " + uuid);
         }
-        validateCategorie(existingCategorie, true);
         existingCategorie.setNameCategorie(updatedCategorie.getNameCategorie());
         existingCategorie.setImageCategorie(updatedCategorie.getImageCategorie());
-
+        validateCategorie(existingCategorie, true);
         try {
+
             Categorie savedCategorie = categorieRepo.save(existingCategorie);
             logger.info("La catégorie est Modifier avec succée : {}", savedCategorie);
             return savedCategorie;
@@ -120,13 +124,8 @@ public class CategorieServiceImpl implements CategorieService {
             throw new IllegalArgumentException("erreur lors de mise a jour de categorie");
         }
     }
-
-
-
-
-
-
-
-
-
 }
+
+
+
+

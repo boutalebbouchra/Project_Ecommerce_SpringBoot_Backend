@@ -13,4 +13,5 @@ public interface CategorieService {
     void deleteCategorieByUuidCategorie(String uuid);
    Categorie updateCategorie(String uuid, Categorie updatedCategorie);
     List<Categorie> getAllCategories();
+
 }
