@@ -29,7 +29,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product saveProduct(Product product) {
         validateProduct(product,false);
-
         try {
             // Continuez avec l'enregistrement du produit dans la base de données
             Product savedProduct = productRepository.save(product);
@@ -96,8 +95,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
-
     private void validateUniqueName(String name) {
         Optional<Product> existingProductWithName = productRepository.findByName(name);
         if (existingProductWithName.isPresent()) {
@@ -152,7 +149,7 @@ public class ProductServiceImpl implements ProductService {
 
         try {
             productRepository.delete(existingProduct);
-            logger.info("Produit supprimé avec succès avec l'UUID : {}", uuid);
+            logger.info("Produi  t supprimé avec succès avec l'UUID : {}", uuid);
         } catch (Exception e) {
             logger.error("Erreur lors de la suppression du produit : {}", e.getMessage());
             throw new IllegalArgumentException("Erreur lors de la suppression du produit.");
