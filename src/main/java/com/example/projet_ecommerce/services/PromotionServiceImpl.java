@@ -56,6 +56,48 @@ public class PromotionServiceImpl implements PromotionService {
         }
     }
 
+    //API POUR MODIFIER UNE PROMOTION
+
+    @Override
+    public Promotion updatePromotion(String uuid, Promotion updatedPromotion) {
+        Promotion existingPromotion = getPromotionByUuid(uuid);
+
+        if (existingPromotion == null) {
+            throw new IllegalArgumentException("Promotion introuvable avec l'UUID : " + uuid);
+        }
+
+        // Mettez à jour les champs nécessaires
+        existingPromotion.setStartDate(updatedPromotion.getStartDate());
+        existingPromotion.setEndDate(updatedPromotion.getEndDate());
+        existingPromotion.setDescription(updatedPromotion.getDescription());
+
+        // Validez la promotion mise à jour
+        validatePromotion(existingPromotion);
+
+        try {
+            // Enregistrez la promotion mise à jour dans la base de données
+            Promotion savedPromotion = promotionRepository.save(existingPromotion);
+
+            logger.info("Promotion mise à jour avec succès : {}", savedPromotion);
+            return savedPromotion;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la mise à jour de la promotion : {}", e.getMessage());
+            throw new IllegalArgumentException("Erreur lors de la mise à jour de la promotion.");
+        }
+    }
+
+    @Override
+    public Promotion getPromotionByUuid(String uuid) {
+        logger.info("Recherche de la promotion avec l'UUID : {}", uuid);
+        try {
+            Optional<Promotion> promotionOptional = promotionRepository.findByUuid(uuid);
+            return promotionOptional.orElse(null);
+        } catch (IllegalArgumentException e) {
+            logger.error("UUID invalide : {}", uuid);
+            throw new IllegalArgumentException("UUID invalide : " + uuid);
+        }
+    }
+
 
 
 

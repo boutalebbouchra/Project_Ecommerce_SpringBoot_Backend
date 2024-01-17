@@ -3,6 +3,7 @@ package com.example.projet_ecommerce.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name = "promotions")
-public class Promotion {
+public class Promotion implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

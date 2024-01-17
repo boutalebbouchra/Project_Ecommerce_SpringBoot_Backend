@@ -30,6 +30,18 @@ public class PromotionController {
         }
     }
 
+    @PutMapping("/promotion/{uuid}")
+    public ResponseEntity<Object> updatePromotion(@PathVariable String uuid, @RequestBody Promotion updatedPromotion) {
+        try {
+            Promotion modifiedPromotion = promotionService.updatePromotion(uuid, updatedPromotion);
+            return new ResponseEntity<>(modifiedPromotion, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }
