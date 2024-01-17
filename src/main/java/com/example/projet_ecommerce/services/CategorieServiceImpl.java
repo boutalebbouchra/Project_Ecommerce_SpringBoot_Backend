@@ -124,6 +124,8 @@ public class CategorieServiceImpl implements CategorieService {
             throw new IllegalArgumentException("erreur lors de mise a jour de categorie");
         }
     }
+
+
 }
 
 
