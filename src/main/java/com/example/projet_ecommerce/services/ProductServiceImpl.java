@@ -53,7 +53,6 @@ public class ProductServiceImpl implements ProductService {
             validateUniqueUUID(product.getUuid());
         }
 
-        validateUniqueName(product.getName());
     }
 
     private void validatePositivePrice(BigDecimal price) {
@@ -95,12 +94,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    private void validateUniqueName(String name) {
-        Optional<Product> existingProductWithName = productRepository.findByName(name);
-        if (existingProductWithName.isPresent()) {
-            throw new IllegalArgumentException("Un produit avec ce nom existe déjà.");
-        }
-    }
+
 
 
     //api pour modifier un produit:
